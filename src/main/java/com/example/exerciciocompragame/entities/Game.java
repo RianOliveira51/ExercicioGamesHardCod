@@ -7,8 +7,8 @@ public class Game extends Armazem implements Games {
 
     private double price;
 
-    public Game(Integer codigo, String nome, Integer ID, Integer quant,double price) {
-        super(ID, quant);
+    public Game(Integer codigo, String nome, Integer Aramzem, Integer quant,double price) {
+        super(Aramzem, quant);
         this.codigo = codigo;
         this.nome = nome;
         this.price = price;
@@ -22,7 +22,6 @@ public class Game extends Armazem implements Games {
         return nome;
     }
 
-
     public double getPrice(){
         return price;
     }
@@ -33,7 +32,7 @@ public class Game extends Armazem implements Games {
 
     @Override
     public double total(Integer quant, double price) {
-        return 0;
+        return quant * price;
     }
 
     @Override

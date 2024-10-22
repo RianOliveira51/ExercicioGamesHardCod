@@ -2,16 +2,16 @@ package com.example.exerciciocompragame.entities;
 
 public class Armazem {
 
-    private Integer ID;
+    private Integer armazem;
     private Integer quant;
 
-    public Armazem(Integer ID, Integer quant){
-        this.ID = ID;
+    public Armazem(Integer armazem, Integer quant){
+        this.armazem = armazem;
         this.quant = quant;
     }
 
     public Integer getId(){
-        return ID;
+        return armazem;
     }
 
     public Integer getQuant(){
@@ -23,7 +23,7 @@ public class Armazem {
     }
     @Override
     public String toString(){
-        return "Armazem: " + ID + ", Quantidade: " + quant;
+        return "Armazem: " + armazem + ", Quantidade: " + quant;
     }
 
 }

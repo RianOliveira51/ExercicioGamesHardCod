@@ -1,5 +1,6 @@
 package com.example.exerciciocompragame;
 
+import com.example.exerciciocompragame.entities.Carrinho;
 import com.example.exerciciocompragame.entities.Comprador;
 import com.example.exerciciocompragame.entities.Game;
 import com.example.exerciciocompragame.entities.Games;
@@ -30,58 +31,81 @@ public class ExercicioCompraGameApplication {
         System.out.println("Bem-Vindo a loja de games");
         System.out.print("Por favor, digite seu nome: ");
         String name = sc.nextLine();
-        System.out.print("Certo, seja bem-vindo: " + name + "\nAgora digite CPF:" );
+        System.out.print("Certo, seja bem-vindo: " + name + "\nAgora digite CPF: ");
         String cpf = sc.nextLine();
 
-        while(cpf.length() != 11 ) {
+        while (cpf.length() != 11 || name.isEmpty()) {
             if (cpf.length() != 11) {
                 System.out.println("CPF invalido, favor digitar novamente");
+                System.out.print("CPF: ");
                 cpf = sc.nextLine();
+            } else if (name.isEmpty()) {
+                System.out.println("Nome não digitado, favor, digite novamente.");
+                System.out.print("Nome: ");
+                name = sc.nextLine();
             }
         }
 
         Comprador comprador = new Comprador(name, cpf);
 
         List<Game> games = new ArrayList<>();
-        games.add(new Game(15478, "Horizon Forbeddin", 32, 6, 250.00));
-        games.add(new Game(16879, "Lego batman", 31, 8, 25));
-        games.add(new Game(11548, "Clash 4", 36, 12,350.00));
-        games.add(new Game(14896, "Persona 3", 30, 21, 215.00));
+        List<Carrinho> carrinho = new ArrayList<>();
+
+        games.add(new Game(15478, "Horizon Forbeddin", 32, 2, 250.00));
+        games.add(new Game(16879, "Lego batman", 31, 2, 25.00));
+        games.add(new Game(11548, "Clash 4", 36, 2, 350.00));
+        games.add(new Game(14896, "Persona 3", 30, 2, 215.00));
 
         System.out.println("Escolha a rotina que deseja entrar");
         System.out.println("1 - Comprar.\n2 - ver carrinho\n3 - excluir do carrinho\n4 - olhar lista de disponíveis\n5 -Imprimir lista (em csv ou txt).");
         int opc = sc.nextInt();
 
-        while (opc < 1 || opc > 6) {
-            switch (opc) {
-                case 1:
+        switch (opc) {
+            case 1:
+                System.out.println("Você selecionou comprar, escolha qual games quer levar\nDigite o id do jogo e a quantidade");
+                for (Game l : games) {
+                    System.out.println(l);
+                }
 
-                    break;
+                System.out.println("Escolha o Jogo pelo o ID");
+                int IdJogo = sc.nextInt();
 
-                case 2:
-
-                    break;
-
-                case 3:
-
-                    break;
-
-                case 4:
-                    for (Games l : games) {
-                        System.out.println(l);
+                for (Game l : games) {
+                    if (IdJogo == l.getId()) {
+                        carrinho.add(new Carrinho(l.getCodigo(), l.getNome(), 32, l.getQuant(), l.getPrice()));
                     }
-                    break;
+                }
 
-                case 5:
+                System.out.println("Dentro carrinho");
+                for (Carrinho c : carrinho) {
+                    System.out.println(c);
+                }
+                break;
+            case 2:
 
-                    break;
+                break;
+
+            case 3:
+
+                break;
+
+            case 4:
+                for (Game l : games) {
+                    System.out.println(l);
+                }
+                break;
+
+            case 5:
+
+                break;
 
 
-                default:
-                    System.out.println("Opção selecionada invalida");
-                    break;
-            }
+            default:
+                System.out.println("Opção selecionada invalida, escolha novamente.");
+                opc = sc.nextInt();
+                break;
         }
+
     }
 
 }
