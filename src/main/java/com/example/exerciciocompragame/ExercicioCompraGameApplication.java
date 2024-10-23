@@ -3,14 +3,15 @@ package com.example.exerciciocompragame;
 import com.example.exerciciocompragame.entities.Carrinho;
 import com.example.exerciciocompragame.entities.Comprador;
 import com.example.exerciciocompragame.entities.Game;
-import com.example.exerciciocompragame.entities.Games;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
+
+import static java.lang.System.exit;
 /*Fazer um programa que simule uma loja de compra de video game, onde contenha um menu com as seguintes opções:
 1 - Comprar.
 2 - ver carrinho.
@@ -27,6 +28,9 @@ public class ExercicioCompraGameApplication {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         Locale.setDefault(Locale.US);
+        //Variveais
+        char escolhaContinuar;
+        int opcMenu;
 
         System.out.println("Bem-Vindo a loja de games");
         System.out.print("Por favor, digite seu nome: ");
@@ -34,6 +38,7 @@ public class ExercicioCompraGameApplication {
         System.out.print("Certo, seja bem-vindo: " + name + "\nAgora digite CPF: ");
         String cpf = sc.nextLine();
 
+        //tratamento de exeção manual, será criado uma classe para esse tratamento.
         while (cpf.length() != 11 || name.isEmpty()) {
             if (cpf.length() != 11) {
                 System.out.println("CPF invalido, favor digitar novamente");
@@ -48,63 +53,96 @@ public class ExercicioCompraGameApplication {
 
         Comprador comprador = new Comprador(name, cpf);
 
+        //criando lista de games e carrinho
         List<Game> games = new ArrayList<>();
         List<Carrinho> carrinho = new ArrayList<>();
 
+        //Instanciando uma lista de games
         games.add(new Game(15478, "Horizon Forbeddin", 32, 2, 250.00));
         games.add(new Game(16879, "Lego batman", 31, 2, 25.00));
         games.add(new Game(11548, "Clash 4", 36, 2, 350.00));
         games.add(new Game(14896, "Persona 3", 30, 2, 215.00));
 
-        System.out.println("Escolha a rotina que deseja entrar");
-        System.out.println("1 - Comprar.\n2 - ver carrinho\n3 - excluir do carrinho\n4 - olhar lista de disponíveis\n5 -Imprimir lista (em csv ou txt).");
-        int opc = sc.nextInt();
+        do {
+            System.out.println("Escolha a rotina que deseja entrar");
+            System.out.println("1 - Comprar.\n2 - excluir do carrinho\n3 - ver carrinho\n4 - olhar lista de disponíveis\n5 -Imprimir lista (em csv ou txt)\n6 - Sair.");
+            opcMenu = sc.nextInt();
 
-        switch (opc) {
-            case 1:
-                System.out.println("Você selecionou comprar, escolha qual games quer levar\nDigite o id do jogo e a quantidade");
-                for (Game l : games) {
-                    System.out.println(l);
-                }
+            //Loop do menu das rotinas
+            switch (opcMenu) {
+                //Comprar item
+                case 1:
+                    do {
+                        System.out.println("Você selecionou comprar, escolha qual games quer levar\nDigite o id do jogo e a quantidade");
+                        for (Game l : games) {
+                            System.out.println(l);
+                        }
 
-                System.out.println("Escolha o Jogo pelo o ID");
-                int IdJogo = sc.nextInt();
+                        System.out.println("Escolha o Jogo pelo o ID");
+                        int IdJogo = sc.nextInt();
 
-                for (Game l : games) {
-                    if (IdJogo == l.getId()) {
-                        carrinho.add(new Carrinho(l.getCodigo(), l.getNome(), 32, l.getQuant(), l.getPrice()));
+                        for (Game l : games) {
+                            if (IdJogo == l.getCodigo()) {
+                                carrinho.add(new Carrinho(l.getCodigo(), l.getNome(), l.getArmazem(), l.getQuant(), l.getPrice()));
+                            }else{
+                                System.out.println("Codigo invalido");
+                            }
+                        }
+                        //consumir espaço do int
+                        sc.nextLine();
+
+                        System.out.println("Deseja comprar outro jogo: S ou N");
+                        escolhaContinuar = sc.nextLine().charAt(0);
+                    } while (escolhaContinuar == 'S');
+
+                    break;
+                //Excluir item
+                case 2:
+                    System.out.println("Dentro carrinho");
+                    for (Carrinho c : carrinho) {
+                        System.out.println(c);
                     }
-                }
+                    System.out.println("Qual item do carrinho, deseja remover, favor, digitar o ID");
+                    int IdJogo = sc.nextInt();
 
-                System.out.println("Dentro carrinho");
-                for (Carrinho c : carrinho) {
-                    System.out.println(c);
-                }
-                break;
-            case 2:
+                    System.out.println("Dentro carrinho");
+                    for (Carrinho c : carrinho) {
+                        if (IdJogo == c.getCodigo()) {
+                            carrinho.remove(c);
+                        }
+                    }
 
-                break;
+                    break;
+                 //Ver lista do carrinho
+                case 3:
+                    System.out.println("Dentro carrinho");
+                    for (Carrinho c : carrinho) {
+                        System.out.println(c);
+                    }
+                    break;
+                //ver games disponiveis
+                case 4:
+                    for (Game l : games) {
+                        System.out.println(l);
+                    }
 
-            case 3:
+                    break;
+                //imprimir cvs
+                case 5:
 
-                break;
-
-            case 4:
-                for (Game l : games) {
-                    System.out.println(l);
-                }
-                break;
-
-            case 5:
-
-                break;
-
-
-            default:
-                System.out.println("Opção selecionada invalida, escolha novamente.");
-                opc = sc.nextInt();
-                break;
-        }
+                    break;
+                //sair da loja
+                case 6:
+                    System.out.println("Saindo da loja");
+                    exit(0);
+                    break;
+                //Caso não exista a opção selecioanda
+                default:
+                    System.out.println("Opção selecionada invalida, escolha novamente.");
+                    opcMenu = sc.nextInt();
+                    break;
+            }
+        }while (opcMenu >= 1 || opcMenu <= 6 );
 
     }
 

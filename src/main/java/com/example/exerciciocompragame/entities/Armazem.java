@@ -10,7 +10,7 @@ public class Armazem {
         this.quant = quant;
     }
 
-    public Integer getId(){
+    public Integer getArmazem(){
         return armazem;
     }
 

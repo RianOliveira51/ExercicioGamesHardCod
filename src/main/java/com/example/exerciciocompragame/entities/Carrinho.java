@@ -16,6 +16,9 @@ public class Carrinho extends Game {
 
     @Override
     public String toString(){
-        return "ID do carrinho: " + getIDCarrinho();
+        return "ID do carrinho: " + IDCarrinho
+                + ", ID do jogo: " + getCodigo()
+                + ", Nome: " + getNome()
+                + ", Valor: " + String.format("%.2f", getPrice());
     }
 }
