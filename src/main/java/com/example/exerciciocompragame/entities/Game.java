@@ -1,6 +1,6 @@
 package com.example.exerciciocompragame.entities;
 
-public class Game extends Armazem implements Games {
+public class Game extends Armazem implements GameIf {
 
     private Integer codigo;
     private String nome;

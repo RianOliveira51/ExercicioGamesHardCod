@@ -18,7 +18,7 @@ import static java.lang.System.exit;
 3 - excluir do carrinho
 4 - olhar lista de disponíveis
 5 - Abastecer estoque (somente pessoal que trabalha, pode abastastecer;
-6 -Imprimir lista (em csv ou txt).
+6 - Imprimir lista (em csv ou txt) - NFE
 A partir disso implementar cada uma das funções, lembrando que Obrigatório controlar estoque e
 lembre-se que não se deve trabalhar como estoque negativo.*/
 
@@ -80,13 +80,15 @@ public class ExercicioCompraGameApplication {
 
                         System.out.println("Escolha o Jogo pelo o ID");
                         int IdJogo = sc.nextInt();
-
+                        boolean encontro = false;
                         for (Game l : games) {
                             if (IdJogo == l.getCodigo()) {
                                 carrinho.add(new Carrinho(l.getCodigo(), l.getNome(), l.getArmazem(), l.getQuant(), l.getPrice()));
-                            }else{
-                                System.out.println("Codigo invalido");
+                                encontro = true;
                             }
+                        }
+                        if (!encontro){
+                            System.out.println("Codigo invalido");
                         }
                         //consumir espaço do int
                         sc.nextLine();
@@ -102,13 +104,16 @@ public class ExercicioCompraGameApplication {
                     for (Carrinho c : carrinho) {
                         System.out.println(c);
                     }
+
                     System.out.println("Qual item do carrinho, deseja remover, favor, digitar o ID");
                     int IdJogo = sc.nextInt();
 
                     System.out.println("Dentro carrinho");
-                    for (Carrinho c : carrinho) {
+                    for(int i=0; i<carrinho.size(); i++) {
+                        Carrinho c = carrinho.get(i);
                         if (IdJogo == c.getCodigo()) {
                             carrinho.remove(c);
+                            i--;
                         }
                     }
 

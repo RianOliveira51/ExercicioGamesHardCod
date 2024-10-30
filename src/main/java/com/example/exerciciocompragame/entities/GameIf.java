@@ -1,6 +1,6 @@
 package com.example.exerciciocompragame.entities;
 
-public interface Games {
+public interface GameIf {
 
    double total(Integer quant, double price);
 }
