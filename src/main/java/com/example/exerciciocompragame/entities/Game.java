@@ -1,20 +1,21 @@
 package com.example.exerciciocompragame.entities;
 
+import static java.lang.String.format;
+
 public class Game extends Armazem implements GameIf {
 
-    private Integer codigo;
+    private int codigo;
     private String nome;
-
     private double price;
 
-    public Game(Integer codigo, String nome, Integer Aramzem, Integer quant,double price) {
-        super(Aramzem, quant);
+    public Game(int codigo, String nome, int Armazem, int quant,double price) {
+        super(Armazem, quant);
         this.codigo = codigo;
         this.nome = nome;
         this.price = price;
     }
 
-    public Integer getCodigo(){
+    public int getCodigo(){
         return codigo;
     }
 
@@ -31,14 +32,22 @@ public class Game extends Armazem implements GameIf {
     }
 
     @Override
-    public double total(Integer quant, double price) {
-        return quant * price;
+    public double total() {
+        double total;
+        return total = getQuant() * price;
+    }
+
+    public void retirada(){
+        setQuant(getQuant() - 1);
     }
 
     @Override
     public String toString(){
         return "ID: " + codigo +
                 ", Nome: " + nome +
-                ", Price: " + String.format("%.2f", price);
+                ", Quantidade Disponivel: " + getQuant() +
+                ", Price: " + price;
+
+
     }
 }

@@ -5,6 +5,9 @@ import com.example.exerciciocompragame.entities.Comprador;
 import com.example.exerciciocompragame.entities.Game;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +35,9 @@ public class ExercicioCompraGameApplication {
         char escolhaContinuar;
         int opcMenu;
 
+        String NF = "c:\\temp\\NotaFisca.csv";
+
+
         System.out.println("Bem-Vindo a loja de games");
         System.out.print("Por favor, digite seu nome: ");
         String name = sc.nextLine();
@@ -41,7 +47,7 @@ public class ExercicioCompraGameApplication {
         //tratamento de exeção manual, será criado uma classe para esse tratamento.
         while (cpf.length() != 11 || name.isEmpty()) {
             if (cpf.length() != 11) {
-                System.out.println("CPF invalido, favor digitar novamente");
+                System.out.println("CPF invalido,CPF deve ter 11 numeros, favor digitar novamente");
                 System.out.print("CPF: ");
                 cpf = sc.nextLine();
             } else if (name.isEmpty()) {
@@ -58,14 +64,14 @@ public class ExercicioCompraGameApplication {
         List<Carrinho> carrinho = new ArrayList<>();
 
         //Instanciando uma lista de games
-        games.add(new Game(15478, "Horizon Forbeddin", 32, 2, 250.00));
-        games.add(new Game(16879, "Lego batman", 31, 2, 25.00));
-        games.add(new Game(11548, "Clash 4", 36, 2, 350.00));
-        games.add(new Game(14896, "Persona 3", 30, 2, 215.00));
+        games.add(new Game(15478, "Horizon Forbeddin", 32, 3, 250.00));
+        games.add(new Game(16879, "Lego batman", 31, 1, 25.00));
+        games.add(new Game(11548, "Clash 4", 36, 5, 350.00));
+        games.add(new Game(14896, "Persona 3", 30, 4, 215.00));
 
         do {
             System.out.println("Escolha a rotina que deseja entrar");
-            System.out.println("1 - Comprar.\n2 - excluir do carrinho\n3 - ver carrinho\n4 - olhar lista de disponíveis\n5 -Imprimir lista (em csv ou txt)\n6 - Sair.");
+            System.out.println("1 - Comprar.\n2 - excluir do carrinho\n3 - ver carrinho\n4 - olhar lista de disponíveis\n5 - Imprimir Nota Fiscal (em csv ou txt)\n6 - Sair.");
             opcMenu = sc.nextInt();
 
             //Loop do menu das rotinas
@@ -83,11 +89,18 @@ public class ExercicioCompraGameApplication {
                         boolean encontro = false;
                         for (Game l : games) {
                             if (IdJogo == l.getCodigo()) {
-                                carrinho.add(new Carrinho(l.getCodigo(), l.getNome(), l.getArmazem(), l.getQuant(), l.getPrice()));
                                 encontro = true;
+                                if (l.getQuant() > 0) {
+                                    carrinho.add(new Carrinho(l.getCodigo(), l.getNome(), l.getArmazem(), l.getQuant(), l.getPrice()));
+                                    l.retirada();
+                                    l.total();
+                                }else {
+                                    System.out.println("Jogo não possue quantidade no estoque");
+                                    break;
+                                }
                             }
                         }
-                        if (!encontro){
+                        if (!encontro) {
                             System.out.println("Codigo invalido");
                         }
                         //consumir espaço do int
@@ -100,29 +113,40 @@ public class ExercicioCompraGameApplication {
                     break;
                 //Excluir item
                 case 2:
-                    System.out.println("Dentro carrinho");
-                    for (Carrinho c : carrinho) {
-                        System.out.println(c);
-                    }
-
-                    System.out.println("Qual item do carrinho, deseja remover, favor, digitar o ID");
-                    int IdJogo = sc.nextInt();
-
-                    System.out.println("Dentro carrinho");
-                    for(int i=0; i<carrinho.size(); i++) {
-                        Carrinho c = carrinho.get(i);
-                        if (IdJogo == c.getCodigo()) {
-                            carrinho.remove(c);
-                            i--;
+                    if (carrinho.size() > 0) {
+                        System.out.println("Dentro carrinho");
+                        for (Carrinho c : carrinho) {
+                            System.out.println(c);
                         }
+
+                        System.out.println("Qual item do carrinho, deseja remover, favor, digitar o ID");
+                        int IdJogo = sc.nextInt();
+
+                        System.out.println("Dentro carrinho");
+
+                        for (int i = 0; i < carrinho.size(); i++) {
+                            Carrinho c = carrinho.get(i);
+                            if (IdJogo == c.getCodigo()) {
+                                carrinho.remove(c);
+                                i--;
+                            } else {
+                                System.out.println("Item não existe no carrinho;");
+                            }
+                        }
+                    } else {
+                        System.out.println("Carrinho vazio");
                     }
 
                     break;
-                 //Ver lista do carrinho
+                //Ver lista do carrinho
                 case 3:
-                    System.out.println("Dentro carrinho");
-                    for (Carrinho c : carrinho) {
-                        System.out.println(c);
+                    if (carrinho.size() > 0) {
+                        System.out.println("Dentro carrinho");
+                        for (Carrinho c : carrinho) {
+                            System.out.println(c);
+                        }
+                    } else {
+                        System.out.println("Carrinho vazio");
                     }
                     break;
                 //ver games disponiveis
@@ -134,6 +158,16 @@ public class ExercicioCompraGameApplication {
                     break;
                 //imprimir cvs
                 case 5:
+                    try(BufferedWriter br = new BufferedWriter(new FileWriter(NF))){
+                        for (Carrinho c : carrinho){
+                            br.write(c.getCodigo() + "," + c.getNome() + "," + c.getArmazem() + "," + c.getQuant() + "," + c.getPrice());
+                            br.newLine();
+                        }
+
+                        System.out.println("Nota Fiscal impressa com sucesso");
+                    }catch (IOException e){
+                        System.out.println("Erro ao imprimir Nota Fiscal");
+                    }
 
                     break;
                 //sair da loja
@@ -144,11 +178,10 @@ public class ExercicioCompraGameApplication {
                 //Caso não exista a opção selecioanda
                 default:
                     System.out.println("Opção selecionada invalida, escolha novamente.");
-                    opcMenu = sc.nextInt();
                     break;
             }
-        }while (opcMenu >= 1 || opcMenu <= 6 );
+        } while (opcMenu >= 1 || opcMenu <= 6);
 
+        sc.close();
     }
-
 }

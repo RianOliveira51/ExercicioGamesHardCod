@@ -2,25 +2,30 @@ package com.example.exerciciocompragame.entities;
 
 public class Armazem {
 
-    private Integer armazem;
-    private Integer quant;
+    private int armazem;
+    private int quant;
 
-    public Armazem(Integer armazem, Integer quant){
+    public Armazem(int armazem, int quant){
         this.armazem = armazem;
         this.quant = quant;
     }
 
-    public Integer getArmazem(){
+    public int getArmazem(){
         return armazem;
     }
 
-    public Integer getQuant(){
+    public int getQuant(){
         return quant;
     }
 
-    public void setQuant(Integer quant){
+    public void setQuant(int quant){
         this.quant = quant;
     }
+
+    public void retirada(int quant){
+        this.quant = quant - 1;
+    }
+
     @Override
     public String toString(){
         return "Armazem: " + armazem + ", Quantidade: " + quant;
