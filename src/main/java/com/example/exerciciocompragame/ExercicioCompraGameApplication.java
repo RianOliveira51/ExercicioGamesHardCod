@@ -56,7 +56,7 @@ public class ExercicioCompraGameApplication {
                 name = sc.nextLine();
             }
         }
-        System.out.println("TESTE");
+
         Comprador comprador = new Comprador(name, cpf);
 
         //criando lista de games e carrinho
