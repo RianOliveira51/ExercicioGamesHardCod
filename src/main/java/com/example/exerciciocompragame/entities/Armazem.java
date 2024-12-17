@@ -22,9 +22,6 @@ public class Armazem {
         this.quant = quant;
     }
 
-    public void retirada(int quant){
-        this.quant = quant - 1;
-    }
 
     @Override
     public String toString(){

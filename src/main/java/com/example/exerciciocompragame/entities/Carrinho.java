@@ -25,6 +25,8 @@ public class Carrinho extends Game {
         return "ID do carrinho: " + IDCarrinho
                 + ", ID do jogo: " + getCodigo()
                 + ", Nome: " + getNome()
+                + ", Armazem: " + getArmazem()
+                + ", Quant: " + getQuant()
                 + ", Valor: " + getPrice();
     }
 }
