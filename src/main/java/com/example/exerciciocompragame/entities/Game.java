@@ -37,8 +37,8 @@ public class Game extends Armazem implements GameIf {
         return total = getQuant() * price;
     }
 
-    public void retirada(){
-        setQuant(getQuant() - 1);
+    public void retirada(int quant ){
+        setQuant(getQuant() - quant);
     }
 
     @Override

@@ -34,7 +34,7 @@ public class ExercicioCompraGameApplication {
         //Variveais
         char escolhaContinuar;
         int opcMenu;
-
+        double total = 0;
         String NF = "c:\\temp\\NotaFisca.csv";
 
 
@@ -84,16 +84,18 @@ public class ExercicioCompraGameApplication {
                             System.out.println(l);
                         }
 
-                        System.out.println("Escolha o Jogo pelo o ID");
+                        System.out.print("Escolha o Jogo pelo o ID: ");
                         int IdJogo = sc.nextInt();
+                        System.out.print("Quantidade: ");
+                        int quant = sc.nextInt();
                         boolean encontro = false;
                         for (Game l : games) {
                             if (IdJogo == l.getCodigo()) {
                                 encontro = true;
                                 if (l.getQuant() > 0) {
-                                    carrinho.add(new Carrinho(l.getCodigo(), l.getNome(), l.getArmazem(), l.getQuant(), l.getPrice()));
-                                    l.retirada();
-                                    l.total();
+                                    carrinho.add(new Carrinho(l.getCodigo(), l.getNome(), l.getArmazem(), quant, l.getPrice()));
+                                    l.retirada(quant);
+                                    total += quant * l.getPrice();
                                 }else {
                                     System.out.println("Jogo não possue quantidade no estoque");
                                     break;
@@ -160,9 +162,11 @@ public class ExercicioCompraGameApplication {
                 case 5:
                     try(BufferedWriter br = new BufferedWriter(new FileWriter(NF))){
                         for (Carrinho c : carrinho){
-                            br.write(c.getCodigo() + "," + c.getNome() + "," + c.getArmazem() + "," + c.getQuant() + "," + c.getPrice());
+                            br.write("Codigo Jogo: "  + c.getCodigo() + ", Nome jogo: " + c.getNome() + ", Qual Armazem: " + c.getArmazem() + ", Quantidade Comprada: " + c.getQuant() + ", Preço Unidade: " + c.getPrice());
                             br.newLine();
                         }
+
+                        br.write("Valor total da NF: " + String.format("%.2f", total));
 
                         System.out.println("Nota Fiscal impressa com sucesso");
                     }catch (IOException e){
